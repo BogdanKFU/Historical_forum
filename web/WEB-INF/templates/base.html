@@ -1,0 +1,76 @@
+<#macro page_head>
+    <meta charset="utf-8">
+    <script type="application/javascript" src="../../js/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme-spacelab.min.css">
+    <link rel="stylesheet" href="../../css/mycss.css">
+    <script type="application/javascript" src="../../js/bootstrap.js"></script>
+</#macro>
+
+<#macro page_body>
+    Standart page body
+</#macro>
+
+
+<#macro body_header>
+    <div class="row">
+        <div class="col-xs-4"></div>
+        <img src="../Logo.png">
+    </div>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Main</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Posts<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Persons</a></li>
+                            <li><a href="#">Events</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Users</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Log in</a></li>
+                    <li><a href="#">Registration</a></li>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Log in</a></li>
+                        <li><a href="#">Registration</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Private page</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</#macro>
+
+<#macro display_page>
+    <!doctype html>
+    <html>
+    <head>
+        <@page_head/>
+    </head>
+    <body>
+    <div class="content clearfix container-fluid" id="content">
+        <@body_header/>
+        <@page_body/>
+    </div>
+    </body>
+    </html>
+</#macro>
