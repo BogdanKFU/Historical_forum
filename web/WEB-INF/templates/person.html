@@ -118,7 +118,8 @@
                     <div class="form-group">
                         <div class="col-sm-2"><label for="comment">Commentary</label></div>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="comment">
+                            <textarea maxlength="200" id="text" oninput="document.getElementById('p').innerHTML=200-document.getElementById('text').value.length+' charachters remaining.'" type="text" class="form-control" name="comment"></textarea>
+                            <p id="p"></p>
                         </div>
                     </div>
 
