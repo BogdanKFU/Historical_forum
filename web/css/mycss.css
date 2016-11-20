@@ -1,0 +1,19 @@
+.content{
+	margin-left: 100px;
+	margin-right: 100px;
+}
+
+#navid{
+	margin-left: 150px;
+	margin-right: 150px;
+}
+
+#body{
+	background-color: grey;
+}
+
+#list{
+	margin-top: 20px;
+	margin-left: 30px;
+	margin-right: 30px;
+}
