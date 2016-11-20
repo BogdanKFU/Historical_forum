@@ -53,34 +53,37 @@
         </div>
     </div>
     <!--header-->
-<!--content-->
+    <!--content-->
     <div class="row ">
         <div class="content panel panel-default">
-            <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
-                <input type="text" class="form-control input-sm " placeholder="Name" name="name">
+            <div class="row">
+                <div class="col-md-10">
+                    <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
+                        <input type="text" class="form-control " placeholder="Name" name="name">
 
-                <div class="btn-group">
-                    <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm">Profession
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Prof 1</a></li>
-                        <li><a href="#">Prof 2</a></li>
-                    </ul>
+                        <div class="btn-group">
+                            <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                Profession
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Prof 1</a></li>
+                                <li><a href="#">Prof 2</a></li>
+                            </ul>
+                        </div>
+                        <input type="date" class="form-control" placeholder="First date" name="firstdate">
+                        <input type="date" class="form-control" placeholder="Last date" name="lastdate">
+
+                        <button type="submit" class=" btn btn-primary" name="search">Search</button>
+                    </form>
                 </div>
-                <input type="date" class="form-control input-sm" placeholder="First date" name="firstdate">
-                <input type="date" class="form-control input-sm" placeholder="Last date" name="lastdate">
-
-                <button type="submit" class=" btn btn-primary btn-sm" name="search">Search</button>
-            </form>
-
+                <div class="col-md-2" style="margin-top: 19px">
+                    <a href="#" class="btn btn-primary">Create person</a>
+                </div>
+            </div>
             <div class="row">
                 <div class="panel" id="list">
                     <div class="panel-group">
                         <div class="panel panel-default" style="margin: 10px">
-                            <div class="thumbnail col-md-2 col-sm-2"
-                                 style="margin-top: 20px; margin-left: 20px; margin-right: 20px">
-                                <img src="#"/>
-                            </div>
                             <div class="panel-body">
                                 <p class="lead">Name 1</p>
 
@@ -97,10 +100,6 @@
                         </div>
 
                         <div class="panel panel-default" style="margin: 10px">
-                            <div class="thumbnail col-md-2 col-sm-2"
-                                 style="margin-top: 20px; margin-left: 20px; margin-right: 20px">
-                                <img src="#"/>
-                            </div>
                             <div class="panel-body">
                                 <p class="lead">Name 2</p>
 
@@ -131,7 +130,7 @@
             </div>
         </div>
     </div>
-<!--content-->
+    <!--content-->
 
     <!--footer-->
     <div class="footer">
