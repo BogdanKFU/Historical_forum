@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="application/javascript" src="../../js/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme-spacelab.min.css">
+    <link rel="stylesheet" href="../../css/mycss.css">
+    <script type="application/javascript" src="../../js/bootstrap.js"></script>
+</head>
+<body>
+<div class="content clearfix container-fluid" id="content">
+    <!--header-->
+    <div class="row">
+        <div class="col-xs-4"></div>
+        <img src="../Logo.png">
+    </div>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Main</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Posts<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Persons</a></li>
+                            <li><a href="#">Events</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Users</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Log in</a></li>
+                    <li><a href="#">Registration</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Private page</a></li>
+                            <li><a href="#">My messages</a></li>
+                            <li><a href="#">Log out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--header-->
+    <!--content-->
+    <div class="row ">
+        <div class="content panel panel-default">
+            <div class="row">
+
+                <div class="btn-group col-md-2" style="margin-top: 20px; margin-left: 20px">
+                    <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">Messages
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">All</a></li>
+                        <li><a href="#">Incoming</a></li>
+                        <li><a href="#">Outcoming</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel" id="list">
+                    <div class="panel-group">
+                        <div class="panel panel-default" style="margin: 10px">
+                            <div class="thumbnail col-md-2 col-sm-2"
+                                 style="margin-top: 20px; margin-left: 20px; margin-right: 20px">
+                                <img src="#"/>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <p class="lead">Name 1</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>Message text.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" style="margin: 10px">
+                            <div class="thumbnail col-md-2 col-sm-2"
+                                 style="margin-top: 20px; margin-left: 20px; margin-right: 20px">
+                                <img src="#"/>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <p class="lead">Name 2</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>Message text.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--content-->
+
+    <!--footer-->
+    <div class="footer">
+        <p class="text-muted">Copyright (c) 2016</p>
+    </div>
+    <!--footer-->
+</div>
+
+</body>
+</html>
