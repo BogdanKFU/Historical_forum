@@ -11,14 +11,12 @@
 </head>
 
 <body>
+<!--header-->
 <div class="content clearfix container-fluid" id="content">
-    <!--header-->
     <div class="row">
         <div class="col-xs-4"></div>
         <img src="../Logo.png">
     </div>
-
-
     <div class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -57,59 +55,49 @@
             </div>
         </div>
     </div>
-
+    <!--header-->
 
     <!--content-->
-
 
     <div class="row">
 
         <div class="content panel panel-default col-md-9">
             <div class="page-heading">
-                <h1>Login</h1>
+                <h1>Section creation</h1>
             </div>
             <div class="alert alert-danger" role="alert">
                 <strong>Error: </strong>Some error
             </div>
-            <form method="post" action="/login" class="form-horizontal">
+            <form method="post" action="/#" class="form-horizontal">
                 <div class="form-group">
-                    <div class="col-sm-2"><label for="username">Username</label></div>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" name="username" placeholder="Login">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-2"><label for="password">Password</label></div>
-                    <div class="col-sm-6">
-                        <input type="password" class="form-control" name="password" placeholder="password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="remember"> Remember me
-                            </label>
-                        </div>
+                    <div class="col-md-2"><label for="name" class="col-sm-4">Section name</label></div>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control" name="name" placeholder="Section name">
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="col-md-2"><label for="post-text" class="col-sm-4">Text</label></div>
+                    <div class="col-sm-8"><textarea type="text" class="form-control" name="text" id="post-text"></textarea></div>
+                </div>
 
                 <div class="form-group">
-                    <div class="col-sm-2"></div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary" name="send">Send</button>
-                    </div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary" name="send">Forgot password?</button>
+                    <div class="col-md-2"><label for="disable_notifications" class="col-xs-3">Disable notifications</label></div>
+
+                    <div class="col-xs-9"><input type="checkbox" class="input-lg" name="disable_notifications"></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-md-2">
+                        <input type="submit" class="btn btn-primary" value="Post this">
                     </div>
                 </div>
 
             </form>
+
         </div>
     </div>
     <!--content-->
-
 
     <!--footer-->
     <div class="footer">
