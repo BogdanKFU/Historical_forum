@@ -55,14 +55,22 @@
     <!--header-->
 
     <div class="row">
-        <div class="content panel panel-default">
-            <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
-                <input type="text" class="form-control " placeholder="Event name" name="name">
-                <input type="date" class="form-control " placeholder="First date" name="firstdate">
-                <input type="date" class="form-control " placeholder="Last date" name="lastdate">
 
-                <button type="submit" class=" btn btn-primary" name="search">Search</button>
-            </form>
+        <div class="content panel panel-default">
+            <div class="row">
+                <div class="col-md-10">
+                    <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
+                        <input type="text" class="form-control " placeholder="Name" name="name">
+                        <input type="date" class="form-control" placeholder="First date" name="firstdate">
+                        <input type="date" class="form-control" placeholder="Last date" name="lastdate">
+
+                        <button type="submit" class=" btn btn-primary" name="search">Search</button>
+                    </form>
+                </div>
+                <div class="col-md-2" style="margin-top: 19px">
+                    <a href="#" class="btn btn-primary">Create event</a>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="panel" id="list">
