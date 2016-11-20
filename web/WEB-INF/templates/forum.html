@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     <script type="application/javascript" src="../../js/jquery-3.1.1.js"></script>
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <link rel="stylesheet" href="../../css/bootstrap-theme-spacelab.min.css">
     <link rel="stylesheet" href="../../css/mycss.css">
     <script type="application/javascript" src="../../js/bootstrap.js"></script>
 </head>
-
 <body>
-
 <div class="content clearfix container-fluid" id="content">
     <!--header-->
     <div class="row">
-        <div class="col-xs-3"></div>
+        <div class="col-xs-4"></div>
         <img src="../Logo.png">
     </div>
     <div class="navbar navbar-default navbar-static-top" role="navigation">
@@ -39,6 +36,7 @@
                     </li>
                     <li><a href="#">Forum</a></li>
                     <li><a href="#">Users</a></li>
+                    <li><a href="#">Create post</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Log in</a></li>
@@ -56,44 +54,62 @@
         </div>
     </div>
     <!--header-->
+    <!--content-->
+    <div class="row ">
+        <div class="content panel panel-default">
+            <div class="row">
+                <div class="col-md-4 col-sm-7">
+                    <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
+                        <input type="text" class="form-control input-sm " placeholder="Section name" name="name">
 
-    <div class="row">
-        <div class="content panel panel-default col-md-9">
-            <div class="panel-group">
-                <div class="col-md-3">
-                    <div class="thumbnail" style="margin-top: 20px">
-                        <img src="../../">
-                    </div>
+                        <button type="submit" class=" btn btn-primary btn-sm" name="search">Search</button>
+                    </form>
                 </div>
-
-                <div class="col-md-6">
-                    <h1>Name:
-                        <small>Podriv</small>
-                    </h1>
-
-                    <h1>Surname:
-                        <small>Ystoev</small>
-                    </h1>
-
-                    <h1>Date of birth:
-                        <small>24.11.1987</small>
-                    </h1>
+                <div class="col-md-2 col-sm-2">
+                    <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
+                        <button type="submit" class=" btn btn-primary btn-sm" name="search">Create section</button>
+                    </form>
                 </div>
             </div>
 
-            <div class="panel-group col-md-10">
-                <h1>Interests:</h1>
-                <p class="lead">explosions, flames, blazes</p>
+            <div class="row">
+                <div class="panel" id="list">
+                    <div class="panel-group">
+                        <div class="panel panel-default" style="margin: 10px">
+                            <div class="panel-body">
+                                <p class="lead">Section 1</p>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" style="margin: 10px">
+                            <div class="panel-body">
+                                <p class="lead">Section 2</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <ul class="pagination" style="margin-left: 20px">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
+    <!--content-->
 
+    <!--footer-->
     <div class="footer">
         <p class="text-muted">Copyright (c) 2016</p>
     </div>
-
+    <!--footer-->
 </div>
-
 
 </body>
 </html>
