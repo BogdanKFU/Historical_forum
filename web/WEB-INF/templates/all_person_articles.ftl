@@ -23,7 +23,7 @@
                     <input type="date" class="form-control" placeholder="First date" name="firstdate">
                     <input type="date" class="form-control" placeholder="Last date" name="lastdate">
 
-                    <button type="submit" class=" btn btn-primary" name="search">Search</button>
+                    <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
             <div class="col-md-2" style="margin-top: 19px">
@@ -33,6 +33,7 @@
         <div class="row">
             <div class="panel" id="list">
                 <div class="panel-group">
+                    <#if articles??>
 <ul>
     <#list articles as f>
                     <div class="panel panel-default" style="margin: 10px">
@@ -44,7 +45,8 @@
                     </div>
     </#list>
 </ul>
-                    </div>
+</#if>
+                </div>
                 </div>
 
                 <ul class="pagination" style="margin-left: 20px">

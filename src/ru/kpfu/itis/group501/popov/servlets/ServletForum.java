@@ -3,6 +3,7 @@ package ru.kpfu.itis.group501.popov.servlets;
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Section;
 import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.services.ModelSearchService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,9 +23,12 @@ public class ServletForum extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
-        List list = CustomRepository.get(Section.class);
+        Map<String, List<Object>> map = ModelSearchService.searchSection(request);
         Map<String, Object> root = new HashMap<>();
-        root.put("sections", list);
+        if (map != null) {
+            List list = map.get("Section");
+            root.put("sections", list);
+        }
         Helpers.render(request, response, "forum.ftl", root);
     }
 }

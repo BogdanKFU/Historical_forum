@@ -1,5 +1,6 @@
 package ru.kpfu.itis.group501.popov.services;
 
+import ru.kpfu.itis.group501.popov.models.CustomCookie;
 import ru.kpfu.itis.group501.popov.repository.CustomStatement;
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.CustomRepository;
@@ -16,6 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Здесь не должно быть обращений к БД
 public class UserService {
@@ -27,7 +30,17 @@ public class UserService {
     Возвращает true, если удалось аутентифицировать пользователя,
     false, если - нет.
     */
+    private static Pattern password_p = Pattern.compile("[A-Za-z0-9-_]{4,}[A-Za-z0-9-_]*");
+    private static Pattern email_p = Pattern.compile("[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*");
+    private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!А-Яа-я.,]*");
+    private static Pattern for_names = Pattern.compile("[A-Za-z()0-9/?!]{1,}[A-Za-z0-9А-Яа-я/?!()]*");
+
     public static boolean authenticate(HttpServletRequest request, HttpServletResponse response) {
+        Matcher matcher = password_p.matcher(request.getParameter("password"));
+        Matcher matcher1 = password_p.matcher(request.getParameter("username"));
+        if (!matcher.matches() || !matcher1.matches()) {
+            return false;
+        }
         List list = CustomRepository.getBy(User.class, "username", request.getParameter("username"));
         User auth_user;
         if (list != null && !list.isEmpty()) {
@@ -40,9 +53,12 @@ public class UserService {
                 Cookie cookie = new Cookie("current_user", token);
                 java.util.Date date1 = new java.util.Date();
                 Time assign_time = new Time(date1.getTime());
-                CustomRepository.add_user_cookie(token, (int) auth_user.get("id"), assign_time);
-                cookie.setMaxAge(60 * 60);
-                response.addCookie(cookie);
+                if (request.getParameter("remember") != null) {
+                    CustomCookie customCookie = new CustomCookie((int) auth_user.get("id"), token, assign_time);
+                    CustomRepository.add(customCookie);
+                    cookie.setMaxAge(60 * 60);
+                    response.addCookie(cookie);
+                }
                 return true;
             }
         }
@@ -55,7 +71,7 @@ public class UserService {
     В конце сохраняет изменения в БД.
     Исправить!!!
      */
-    public static void edit(HttpServletRequest request) {
+    public static boolean edit(HttpServletRequest request) {
         try {
             request.setCharacterEncoding("utf-8");
         } catch (UnsupportedEncodingException e) {
@@ -68,6 +84,16 @@ public class UserService {
         String last_name = request.getParameter("last_name");
         String birth_date = request.getParameter("birth_date");
         String interest = request.getParameter("interest");
+        Matcher matcher1 = password_p.matcher(password);
+        Matcher matcher2 = for_names.matcher(first_name);
+        Matcher matcher3 = for_names.matcher(last_name);
+        Matcher matcher4 = text.matcher(interest);
+        if (!matcher1.matches() || !matcher2.matches() || !matcher3.matches() || !matcher4.matches()) {
+            return false;
+        }
+        if (!password.equals(password2)) {
+            return false;
+        }
         SimpleDateFormat format = new SimpleDateFormat();
         format.applyPattern("yyyy-MM-dd");
         java.util.Date date = null;
@@ -86,9 +112,10 @@ public class UserService {
         auth_user.set("birth_date", sql_date);
         auth_user.set("interest", interest);
         CustomRepository.update(auth_user);
+        return true;
     }
 
-    private static String hash(String password) {
+    public static String hash(String password) {
         MessageDigest md;
         String hash = "";
         String sole = "itis";
@@ -131,6 +158,14 @@ public class UserService {
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
         String birth_date = request.getParameter("birth_date");
+        Matcher matcher1 = password_p.matcher(login);
+        Matcher matcher2 = password_p.matcher(password);
+        Matcher matcher3 = email_p.matcher(email);
+        Matcher matcher4 = for_names.matcher(name);
+        Matcher matcher5 = for_names.matcher(surname);
+        if (!matcher1.matches() || !matcher2.matches() || !matcher3.matches() || !matcher4.matches() || !matcher5.matches()) {
+            return false;
+        }
         SimpleDateFormat format = new SimpleDateFormat();
         format.applyPattern("yyyy-MM-dd");
         java.util.Date date = null;
@@ -164,7 +199,8 @@ public class UserService {
             Cookie cookie = new Cookie("current_user", token);
             java.util.Date date1 = new java.util.Date();
             Time assign_time = new Time(date1.getTime());
-            CustomRepository.add_user_cookie(token, (int) new_user.get("id"), assign_time);
+            CustomCookie customCookie = new CustomCookie((int) new_user.get("id"), token,assign_time);
+            CustomRepository.add(customCookie);
             cookie.setMaxAge(60);
             response.addCookie(cookie);
             return true;

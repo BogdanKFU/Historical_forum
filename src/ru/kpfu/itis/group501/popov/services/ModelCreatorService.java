@@ -6,8 +6,11 @@ import ru.kpfu.itis.group501.popov.repository.CustomRepository;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Time;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModelCreatorService {
+    private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!А-Яа-я.,]*");
 
     public static boolean createTopic(HttpServletRequest request) {
         String string = request.getParameter("id");
@@ -19,6 +22,11 @@ public class ModelCreatorService {
         }
         String name = request.getParameter("name");
         String content = request.getParameter("content");
+        Matcher matcher1 = text.matcher(name);
+        Matcher matcher2 = text.matcher(content);
+        if (!matcher1.matches() || !matcher2.matches()) {
+            return false;
+        }
         User current_user = (User) request.getSession().getAttribute("current_user");
         Date date = new Date();
         java.sql.Date publish_date = new java.sql.Date(date.getTime());
@@ -38,6 +46,10 @@ public class ModelCreatorService {
             return false;
         }
         String content = request.getParameter("content");
+        Matcher matcher = text.matcher(content);
+        if (!matcher.matches()) {
+            return false;
+        }
         User current_user = (User) request.getSession().getAttribute("current_user");
         Date date = new Date();
         java.sql.Date sending_date = new java.sql.Date(date.getTime());
@@ -57,6 +69,10 @@ public class ModelCreatorService {
             return false;
         }
         String content = request.getParameter("content");
+        Matcher matcher = text.matcher(content);
+        if (!matcher.matches()) {
+            return false;
+        }
         User current_user = (User) request.getSession().getAttribute("current_user");
         Date date = new Date();
         java.sql.Date send_date = new java.sql.Date(date.getTime());
@@ -76,6 +92,10 @@ public class ModelCreatorService {
             return false;
         }
         String content = request.getParameter("content");
+        Matcher matcher = text.matcher(content);
+        if (!matcher.matches()) {
+            return false;
+        }
         User current_user = (User) request.getSession().getAttribute("current_user");
         Date date = new Date();
         java.sql.Date send_date = new java.sql.Date(date.getTime());

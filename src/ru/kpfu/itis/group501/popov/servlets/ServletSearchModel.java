@@ -1,4 +1,4 @@
-package ru.kpfu.itis.group501.popov.servlets.admin.tocreate;
+package ru.kpfu.itis.group501.popov.servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ServletAdminCreateTopic")
-public class ServletAdminCreateTopic extends HttpServlet {
+@WebServlet(name = "ServletSearchModel")
+public class ServletSearchModel extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

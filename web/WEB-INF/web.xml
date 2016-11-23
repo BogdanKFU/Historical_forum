@@ -76,6 +76,46 @@
         <url-pattern>/admin/create_section</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>getModels</servlet-name>
+        <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.toget.ServletAdminGetModels</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getModels</servlet-name>
+        <url-pattern>/admin/entities/</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteModel</servlet-name>
+        <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.todelete.ServletAdminDeleteModel</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteModel</servlet-name>
+        <url-pattern>/admin/entities/delete</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>getAllModels</servlet-name>
+        <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.toget.ServletAdminGetAllModels</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getAllModels</servlet-name>
+        <url-pattern>/admin/entities</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>createModel</servlet-name>
+        <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.tocreate.ServletAdminCreateModel</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createModel</servlet-name>
+        <url-pattern>/admin/entities/create</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>editModel</servlet-name>
+        <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.toedit.ServletAdminEditModel</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>editModel</servlet-name>
+        <url-pattern>/admin/entities/edit</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>forum</servlet-name>
         <servlet-class>ru.kpfu.itis.group501.popov.servlets.ServletForum</servlet-class>
     </servlet>
@@ -214,6 +254,13 @@
     <filter-mapping>
         <filter-name>filterAccess</filter-name>
         <servlet-name>edit_profile</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>filterAccess</filter-name>
+        <servlet-name>editModel</servlet-name>
+        <servlet-name>getAllModels</servlet-name>
+        <servlet-name>getModels</servlet-name>
+        <servlet-name>createModel</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>filterAccess</filter-name>

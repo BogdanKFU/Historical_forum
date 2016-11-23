@@ -1,5 +1,6 @@
 package ru.kpfu.itis.group501.popov.filters;
 
+import ru.kpfu.itis.group501.popov.models.CustomCookie;
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.CustomRepository;
 
@@ -29,7 +30,12 @@ public class FilterNotAccess implements Filter {
                 }
             }
         }
-        int user_id = CustomRepository.get_user_cookie(value);
+        List list1 = CustomRepository.getBy(CustomCookie.class, "cookie", value);
+        int user_id = -1;
+        if (list1.size() != 0) {
+            CustomCookie cookie = (CustomCookie) CustomRepository.getBy(CustomCookie.class, "cookie", value).get(0);
+            user_id = (int) cookie.get("id_user");
+        }
         if ((((HttpServletRequest)req).getSession().getAttribute("current_user") == null)) {
             if (flag && user_id != -1) {
                 List list = CustomRepository.getBy(User.class, "id", user_id);

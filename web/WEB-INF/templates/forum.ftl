@@ -12,7 +12,7 @@
                 <form class="form-inline" style="margin-top: 20px; margin-left: 20px">
                     <input type="text" class="form-control" placeholder="Section name" name="name">
 
-                    <button type="submit" class=" btn btn-primary" name="search">Search</button>
+                    <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
             <div class="col-md-2 col-sm-2">
@@ -23,6 +23,7 @@
         <div class="row">
             <div class="panel" id="list">
                 <div class="panel-group">
+                    <#if sections??>
                 <ul>
                     <#list sections as g>
                     <div class="panel panel-default" style="margin: 10px">
@@ -31,6 +32,7 @@
                         </div>
                     </div>
                     </#list>
+                    </#if>
                 </ul>
                 </div>
 

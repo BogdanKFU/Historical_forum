@@ -19,9 +19,6 @@
         <textarea name="interest"></textarea>
     </label>
     <input type="file" name="image"/>
-    <input type="submit"/>
-</form>
-<form action="/edit_profile" method="post">
     <label>
         <input type="password" name="password"/>
     </label>

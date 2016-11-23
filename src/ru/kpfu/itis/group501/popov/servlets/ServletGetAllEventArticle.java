@@ -3,6 +3,7 @@ package ru.kpfu.itis.group501.popov.servlets;
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.EventArticle;
 import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.services.ModelSearchService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,9 +23,12 @@ public class ServletGetAllEventArticle extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
+        Map<String, List<Object>> map = ModelSearchService.searchEventArticle(request);
         Map<String, Object> root = new HashMap<>();
-        List list = CustomRepository.get(EventArticle.class);
-        root.put("articles", list);
+        if (map != null) {
+            List list = map.get("EventArticle");
+            root.put("articles", list);
+        }
         Helpers.render(request, response, "all_event_articles.ftl", root);
     }
 }

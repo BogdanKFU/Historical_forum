@@ -11,8 +11,8 @@
             <div class="col-md-4 col-sm-7">
                 <form class="form-inline" style="margin-top: 20px; margin-left: 25px">
                     <input type="text" class="form-control" placeholder="Theme name" name="name">
-
-                    <button type="submit" class=" btn btn-primary" name="search">Search</button>
+                    <input type="hidden" value="${id}" name="id">
+                    <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
             <div class="col-md-2 col-sm-2">

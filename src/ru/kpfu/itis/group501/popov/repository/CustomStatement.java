@@ -1,5 +1,6 @@
 package ru.kpfu.itis.group501.popov.repository;
 
+import ru.kpfu.itis.group501.popov.models.CustomCookie;
 import ru.kpfu.itis.group501.popov.models.Model;
 
 import java.lang.reflect.Field;
@@ -45,6 +46,71 @@ public class CustomStatement {
             else {
                 throw new NullPointerException("Sorry, but this statement hasn't values. So, you can't use AND");
             }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    public CustomStatement and() {
+        if (hasValues()) {
+            return new CustomStatement(sql + " AND ", getModel(), getValues(), getAmount());
+        }
+        else {
+            throw new NullPointerException("Sorry, but this statement hasn't values. So, you can't use AND");
+        }
+    }
+
+    public CustomStatement by(String field_name, Object value) {
+        try {
+            if (!hasValues()) {
+                String sql = getSql();
+                Field field = model.getDeclaredField("table_name");
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                sql = sql + " WHERE " + field.get(model) + "." + field_name + "=?";
+                CustomStatement new_statement = new CustomStatement(sql, getModel(), getValues(), getAmount());
+                new_statement.increase(1);
+                new_statement.add(field_name, value);
+                return new_statement;
+            }
+            else {
+                throw new NullPointerException("Sorry, but this statement has values. So, you can't use WHERE");
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    public CustomStatement ge(String field_name, Object value) {
+        try {
+            String sql = getSql();
+            Field field = model.getDeclaredField("table_name");
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+            sql = sql + field.get(model) + "." + field_name + ">=?";
+            CustomStatement new_statement = new CustomStatement(sql, getModel(), getValues(), getAmount());
+            new_statement.increase(1);
+            new_statement.add(field_name, value);
+            return new_statement;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    public CustomStatement le(String field_name, Object value) {
+        try {
+            String sql = getSql();
+            Field field = model.getDeclaredField("table_name");
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+            sql = sql + field.get(model) + "." + field_name + "<=?";
+            CustomStatement new_statement = new CustomStatement(sql, getModel(), getValues(), getAmount());
+            new_statement.increase(1);
+            new_statement.add(field_name, value);
+            return new_statement;
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return null;
         }
@@ -275,4 +341,5 @@ public class CustomStatement {
     public Map<String, Class<Model>> getJoinedBy() {
         return joinedBy;
     }
+
 }

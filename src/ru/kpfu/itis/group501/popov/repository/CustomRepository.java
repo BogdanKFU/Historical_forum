@@ -9,10 +9,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
-CustomStatement - класс, хранящий sql код.
-Есть методы add(), or(), orderBy() прочие.
- */
 public class CustomRepository {
 
     private static boolean initialized = false;
@@ -43,12 +39,6 @@ public class CustomRepository {
         return update;
     }
 
-    /*
-    Можно избежать постоянной проверки initialized,
-    если при появлении NullPointerException вызывать init(), затем тот же код.
-    Этот метод вызывается один раз для всего класса.
-    Инициализирует static Connection conn, static Map map, static Map RSGetMethods
-     */
     private static void init() {
         try {
             conn = ConnectionSingleton.getConnection();
@@ -120,14 +110,29 @@ public class CustomRepository {
             insert = insert + "?, ";
         }
         insert = insert.substring(0, insert.length() - 5);
-        insert = insert + ") RETURNING id;";
+        try {
+            if (model.getClass().getDeclaredField("id") != null) {
+                insert = insert + ") RETURNING id;";
+            }
+        } catch (NoSuchFieldException e) {
+            insert = insert + ");";
+        }
         return insert;
     }
 
     /*
     Создает DELETE запрос без WHERE и т.п.
      */
-    private static String create_delete(Model model) {
+    private static String create_delete(Class model) {
+        try {
+            Field field = model.getDeclaredField("table_name");
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+            return "DELETE FROM " + field.get(model) + " WHERE id=?";
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -162,7 +167,14 @@ public class CustomRepository {
             PreparedStatement statement = create_request(insert, model);
             ResultSet rs = null;
             if (statement != null) {
-                rs = statement.executeQuery();
+                try {
+                    if (model.getClass().getDeclaredField("id") != null) {
+                        rs = statement.executeQuery();
+                    }
+                } catch (NoSuchFieldException e) {
+                    statement.executeUpdate();
+                }
+
             }
             int i = 0;
             if (rs != null) {
@@ -182,7 +194,7 @@ public class CustomRepository {
             String update = create_update(model) + " WHERE id=?";
             PreparedStatement statement = create_request(update, model);
             if (statement != null) {
-                statement.setInt(model.getClass().getDeclaredFields().length - 1, (int) model.get("id"));
+                statement.setInt(model.getClass().getDeclaredFields().length - 3, (int) model.get("id"));
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -307,14 +319,6 @@ public class CustomRepository {
         return null;
     }
 
-    /*
-    rs - сам ResultSet, т.е. то, что вернулось в результате SQL-запроса
-    model - класс, экземпляр которого нужно создать
-    Возвращает экземпляр Model, соответствующий записи из БД
-    При этом нет никаких проверок на обязательные поля
-    Т.е. при создании экземпляра класса (т.е. записи в БД)
-    нужна обязательная проверка на наличие обязательных полей
-     */
     private static Model create_model(ResultSet rs, Class model) {
         try {
             Constructor constructor = model.getConstructor();
@@ -341,37 +345,40 @@ public class CustomRepository {
         return null;
     }
 
-    public void delete(Model model) {
-
+    public static void delete(Class model, int id) {
+        String delete = create_delete(model);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(delete);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    /*
-    Подходит для select запросов без join,
-    По сути должен возвращать список сущностей
-    Нужно использовать комбинацию HashMap и ArrayList
-    Возвращать нужно HashMap
-     */
     public static Map<String, List<Object>> do_sql(CustomStatement statement) {
         try {
             String sql = statement.getSql();
             PreparedStatement ps;
             ps = conn.prepareStatement(sql);
-            Map values = statement.getValues();
+            Map<String, Object> values = statement.getValues();
             Class model = statement.getModel();
-            int amount = statement.getAmount();
-            for (int i = 1; i <= amount; i++) {
-                String field_name = (String)values.keySet().iterator().next();
-                Field field = model.getDeclaredField(field_name);
-                Class classes = field.getType();
-                Method method = map.get(classes.getName());
-                if (!field.isAccessible()) {
-                    field.setAccessible(true);
+            int i = 1;
+            if (values != null) {
+                for (String s : values.keySet()) {
+                    Field field = model.getDeclaredField(s);
+                    Class classes = field.getType();
+                    Method method = map.get(classes.getName());
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    Object[] method_args = new Object[]{i, values.get(s)};
+                    if (!method.isAccessible()) {
+                        method.setAccessible(true);
+                    }
+                    method.invoke(ps, method_args);
+                    i++;
                 }
-                Object [] method_args = new Object[]{i, values.values().iterator().next()};
-                if (!method.isAccessible()) {
-                    method.setAccessible(true);
-                }
-                method.invoke(ps, method_args);
             }
             ResultSet rs = ps.executeQuery();
             Map joinedBy = statement.getJoinedBy();
@@ -391,46 +398,9 @@ public class CustomRepository {
         return null;
     }
 
-    public static void add_user_cookie(String cookie_value, int user_id, Time time) {
-        try {
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO cookies VALUES (?, ?, ?)");
-            statement.setInt(1, user_id);
-            statement.setString(2, cookie_value);
-            statement.setTime(3, time);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static int get_user_cookie(String cookie_value) {
-        try {
-            PreparedStatement statement = conn.prepareStatement("SELECT * FROM cookies WHERE cookie=?");
-            statement.setString(1, cookie_value);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                return rs.getInt("id");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public static void update_cookie(String cookie_value, int user_id) {
-        try {
-            PreparedStatement statement = conn.prepareStatement("UPDATE cookies SET cookie=? WHERE id=?");
-            statement.setString(1, cookie_value);
-            statement.setInt(2, user_id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void remove_cookie(int user_id) {
         try {
-            PreparedStatement statement = conn.prepareStatement("DELETE FROM cookies WHERE id=?");
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM cookies WHERE id_user=?");
             statement.setInt(1, user_id);
             statement.execute();
         } catch (SQLException e) {

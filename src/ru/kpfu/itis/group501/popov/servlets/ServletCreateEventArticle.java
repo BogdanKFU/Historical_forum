@@ -29,21 +29,9 @@ public class ServletCreateEventArticle extends HttpServlet {
         write_time.toLocalTime();
         String string = request.getParameter("begin_date");
         String string2 = request.getParameter("end_date");
-        SimpleDateFormat format = new SimpleDateFormat();
-        format.applyPattern("yyyy-MM-dd");
-        date = null;
-        Date date2 = null;
-        try {
-            date = format.parse(string);
-            date2 = format.parse(string2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        java.sql.Date begin_date;
-        java.sql.Date end_date;
-        if (date != null && date2 != null) {
-            begin_date = new java.sql.Date(date.getTime());
-            end_date = new java.sql.Date(date2.getTime());
+        java.sql.Date begin_date = Helpers.toDate(string);
+        java.sql.Date end_date = Helpers.toDate(string2);
+        if (begin_date != null && end_date != null) {
             EventArticle new_article = new EventArticle(begin_date, content, (int)current_user.get("id"), end_date, name, write_date, write_time);
             CustomRepository.add(new_article);
             response.sendRedirect("/articles/event?id="+new_article.get("id"));

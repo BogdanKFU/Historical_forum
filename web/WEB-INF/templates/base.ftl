@@ -52,21 +52,20 @@
                     <li><a href="/forum">Forum</a></li>
                     <li><a href="/get_user_list">Users</a></li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/auth/login">Log in</a></li>
                     <li><a href="/auth/sign_up">Registration</a></li>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/auth/login">Log in</a></li>
-                        <li><a href="/auth/sign_up">Registration</a></li>
-                        <li class="dropdown">
-                            <a href="/profile" class="dropdown-toggle" data-toggle="dropdown">Profile<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/profile">Private page</a></li>
-                                <li><a href="/logout">Log out</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <li class="dropdown">
+                        <a href="/profile" class="dropdown-toggle" data-toggle="dropdown">Profile<b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile">Private page</a></li>
+                            <li><a href="/logout">Log out</a></li>
+                        </ul>
+                    </li>
                 </ul>
+
             </div>
         </div>
     </div>
@@ -74,7 +73,7 @@
     <div class="footer">
         <p class="text-muted">Copyright (c) 2016</p>
     </div>
-    </div>
+</div>
 </body>
 </html>
 </#macro>

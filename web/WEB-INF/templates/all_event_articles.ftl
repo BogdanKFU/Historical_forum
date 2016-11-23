@@ -13,7 +13,7 @@
                     <input type="date" class="form-control" placeholder="First date" name="firstdate">
                     <input type="date" class="form-control" placeholder="Last date" name="lastdate">
 
-                    <button type="submit" class=" btn btn-primary" name="search">Search</button>
+                    <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
             <div class="col-md-2" style="margin-top: 19px">
