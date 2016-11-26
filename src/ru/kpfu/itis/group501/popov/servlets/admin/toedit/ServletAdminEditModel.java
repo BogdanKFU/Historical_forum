@@ -3,8 +3,9 @@ package ru.kpfu.itis.group501.popov.servlets.admin.toedit;
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Model;
 import ru.kpfu.itis.group501.popov.models.User;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.services.UserService;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +28,7 @@ public class ServletAdminEditModel extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         String model_name = request.getParameter("model");
         String str = request.getParameter("id");
+        Repository repository = RepositorySingleton.getRepository();
         Integer id = Integer.valueOf(str);
         try {
             Class aClass = Class.forName("ru.kpfu.itis.group501.popov.models." + model_name);
@@ -49,7 +51,7 @@ public class ServletAdminEditModel extends HttpServlet {
                             new_model.set("password", UserService.hash(request.getParameter("password")));
                         }
                         else {
-                            User user = (User) CustomRepository.getBy(User.class, "id", id).get(0);
+                            User user = (User) repository.getBy(User.class, "id", id).get(0);
                             new_model.set("password", user.get("password"));
                         }
                     }
@@ -65,7 +67,7 @@ public class ServletAdminEditModel extends HttpServlet {
                 }
             }
             new_model.set("id", id);
-            CustomRepository.update(new_model);
+            repository.update(new_model);
             response.sendRedirect("/admin/entities/edit?model=" + model_name + "&id=" + id);
         } catch (ClassNotFoundException|NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             response.sendRedirect("/admin/entities");
@@ -75,12 +77,13 @@ public class ServletAdminEditModel extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("utf-8");
+        Repository repository = RepositorySingleton.getRepository();
         String model = request.getParameter("model");
         try {
             Class aClass = Class.forName("ru.kpfu.itis.group501.popov.models." + model);
             String str = request.getParameter("id");
             Integer id = Integer.valueOf(str);
-            Object o = CustomRepository.getBy(aClass, "id", id).get(0);
+            Object o = repository.getBy(aClass, "id", id).get(0);
             Map<String, Object> root = new HashMap<>();
             root.put("model", model);
             Field[] fields = aClass.getDeclaredFields();
@@ -96,7 +99,7 @@ public class ServletAdminEditModel extends HttpServlet {
             if (foreign_key != null && foreign_key.size() != 0) {
                 for(String s: foreign_key.keySet()) {
                     Class forName = Class.forName("ru.kpfu.itis.group501.popov.models." + foreign_key.get(s));
-                    fk_map.put(s, CustomRepository.get(forName));
+                    fk_map.put(s, repository.get(forName));
                 }
                 root.put("fk", fk_map);
             }

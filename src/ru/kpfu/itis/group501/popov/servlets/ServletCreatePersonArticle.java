@@ -3,7 +3,8 @@ package ru.kpfu.itis.group501.popov.servlets;
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.PersonArticle;
 import ru.kpfu.itis.group501.popov.models.User;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +21,7 @@ import java.util.Date;
 public class ServletCreatePersonArticle extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
+        Repository repository = RepositorySingleton.getRepository();
         String name = request.getParameter("name");
         String content = request.getParameter("content");
         User current_user = (User) request.getSession().getAttribute("current_user");
@@ -45,7 +47,7 @@ public class ServletCreatePersonArticle extends HttpServlet {
             birth_date = new java.sql.Date(date.getTime());
             dead_date = new java.sql.Date(date2.getTime());
             PersonArticle new_article = new PersonArticle(birth_date, content, (int) current_user.get("id"), dead_date, name, write_date, write_time);
-            CustomRepository.add(new_article);
+            repository.add(new_article);
             response.sendRedirect("/articles/person?id="+new_article.get("id"));        }
         else {
             response.sendRedirect("/profile");

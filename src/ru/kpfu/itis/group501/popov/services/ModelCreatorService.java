@@ -1,7 +1,7 @@
 package ru.kpfu.itis.group501.popov.services;
 
 import ru.kpfu.itis.group501.popov.models.*;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Time;

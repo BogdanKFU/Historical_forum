@@ -4,12 +4,11 @@ import ru.kpfu.itis.group501.popov.models.EventArticle;
 import ru.kpfu.itis.group501.popov.models.PersonArticle;
 import ru.kpfu.itis.group501.popov.models.Section;
 import ru.kpfu.itis.group501.popov.models.Topic;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
-import ru.kpfu.itis.group501.popov.repository.CustomStatement;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

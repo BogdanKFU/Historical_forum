@@ -1,6 +1,5 @@
-package ru.kpfu.itis.group501.popov.repository;
+package ru.kpfu.itis.group501.popov.repository.custom;
 
-import ru.kpfu.itis.group501.popov.models.CustomCookie;
 import ru.kpfu.itis.group501.popov.models.Model;
 
 import java.lang.reflect.Field;
@@ -14,7 +13,7 @@ Usefull only for selects
 Проблема:
 Не распознает поля с одинаковыми именами. Например, id.
 */
-public class CustomStatement {
+public class CustomStatement implements ru.kpfu.itis.group501.popov.repository.Statement {
     private String sql;
     private int amount = 0;
     private Map<String, Object> values = null;

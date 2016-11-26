@@ -1,6 +1,7 @@
-package ru.kpfu.itis.group501.popov.repository;
+package ru.kpfu.itis.group501.popov.repository.custom;
 
 import ru.kpfu.itis.group501.popov.models.Model;
+import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.singletons.ConnectionSingleton;
 
 import java.lang.reflect.*;
@@ -9,7 +10,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CustomRepository {
+public class CustomRepository implements Repository {
 
     private static boolean initialized = false;
     // В conn хранится Connection, который получается в результате init()
@@ -161,7 +162,7 @@ public class CustomRepository {
     Вставка новой записи в БД, не работает с custom types, т.е. логика этого метода
     не предполагает использование метода setObject(int i, Object arg) у statement
      */
-    public static void add(Model model) {
+    public void add(Model model) {
         try {
             String insert = create_insert(model);
             PreparedStatement statement = create_request(insert, model);
@@ -189,7 +190,7 @@ public class CustomRepository {
     }
 
     // Обновляет информацию в БД по id.
-    public static void update(Model model) {
+    public void update(Model model) {
         try {
             String update = create_update(model) + " WHERE id=?";
             PreparedStatement statement = create_request(update, model);
@@ -241,7 +242,7 @@ public class CustomRepository {
     /*
     Возвращает List<Object> по одному полю. Используется WHERE
      */
-    public static List getBy(Class model, String field_name, Object value) {
+    public List getBy(Class model, String field_name, Object value) {
         String select = create_select(model) + " WHERE " + field_name + "=?";
             try {
                 PreparedStatement statement;
@@ -266,7 +267,7 @@ public class CustomRepository {
     /*
     Возвращает все записи как List<Object>
      */
-    public static List get(Class model) {
+    public List get(Class model) {
         String select = create_select(model);
         try {
             PreparedStatement statement;
@@ -345,7 +346,7 @@ public class CustomRepository {
         return null;
     }
 
-    public static void delete(Class model, int id) {
+    public void delete(Class model, int id) {
         String delete = create_delete(model);
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(delete);
@@ -356,7 +357,7 @@ public class CustomRepository {
         }
     }
 
-    public static Map<String, List<Object>> do_sql(CustomStatement statement) {
+    public Map<String, List<Object>> do_sql(CustomStatement statement) {
         try {
             String sql = statement.getSql();
             PreparedStatement ps;

@@ -1,8 +1,6 @@
 package ru.kpfu.itis.group501.popov.servlets;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
-import ru.kpfu.itis.group501.popov.models.Section;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
 import ru.kpfu.itis.group501.popov.services.ModelSearchService;
 
 import javax.servlet.ServletException;

@@ -1,7 +1,8 @@
 package ru.kpfu.itis.group501.popov.servlets;
 
 import ru.kpfu.itis.group501.popov.models.User;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +25,7 @@ public class ServletBan extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String string = request.getParameter("id");
+        Repository repository = RepositorySingleton.getRepository();
         Integer id = 0;
         try {
             id = Integer.valueOf(string);
@@ -31,12 +33,12 @@ public class ServletBan extends HttpServlet {
         catch (NumberFormatException ex) {
             response.sendRedirect("/profile");
         }
-        List list = CustomRepository.getBy(User.class, "id", id);
+        List list = repository.getBy(User.class, "id", id);
         if (list != null && !list.isEmpty()) {
             User user = (User) list.get(0);
             Map<String, Object> root = new HashMap<>();
             user.set("blocked", true);
-            CustomRepository.update(user);
+            repository.update(user);
             root.put("user", user);
             response.sendRedirect("/profile/?id=" + id);
         }

@@ -2,7 +2,7 @@ package ru.kpfu.itis.group501.popov.filters;
 
 import ru.kpfu.itis.group501.popov.models.CustomCookie;
 import ru.kpfu.itis.group501.popov.models.User;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

@@ -2,8 +2,9 @@ package ru.kpfu.itis.group501.popov.servlets.admin.tocreate;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Model;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.services.UserService;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +25,7 @@ import java.util.Map;
 public class ServletAdminCreateModel extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
+        Repository repository = RepositorySingleton.getRepository();
         String model_name = request.getParameter("model");
         try {
             Class aClass = Class.forName("ru.kpfu.itis.group501.popov.models." + model_name);
@@ -59,7 +60,7 @@ public class ServletAdminCreateModel extends HttpServlet {
                     }
                 }
             }
-            CustomRepository.add(new_model);
+            repository.add(new_model);
             response.sendRedirect("/admin/entities/edit?model=" + model_name + "&id=" + new_model.get("id"));
         } catch (ClassNotFoundException|NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             response.sendRedirect("/admin/entities");
@@ -69,6 +70,7 @@ public class ServletAdminCreateModel extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("utf-8");
+        Repository repository = RepositorySingleton.getRepository();
         String string = request.getParameter("model");
         try {
             Class aClass = Class.forName("ru.kpfu.itis.group501.popov.models." + string);
@@ -89,7 +91,7 @@ public class ServletAdminCreateModel extends HttpServlet {
             if (foreign_key != null && foreign_key.size() != 0) {
                 for(String s: foreign_key.keySet()) {
                     Class forName = Class.forName("ru.kpfu.itis.group501.popov.models." + foreign_key.get(s));
-                    fk_map.put(s, CustomRepository.get(forName));
+                    fk_map.put(s, repository.get(forName));
                 }
                 root.put("fk", fk_map);
             }

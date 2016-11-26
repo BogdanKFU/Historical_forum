@@ -68,14 +68,6 @@
         <url-pattern>/profile/ban/*</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>create_section</servlet-name>
-        <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.tocreate.ServletAdminCreateSection</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>create_section</servlet-name>
-        <url-pattern>/admin/create_section</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>getModels</servlet-name>
         <servlet-class>ru.kpfu.itis.group501.popov.servlets.admin.toget.ServletAdminGetModels</servlet-class>
     </servlet>
@@ -285,10 +277,6 @@
     <filter-mapping>
         <filter-name>filterAccess</filter-name>
         <servlet-name>create_event_article</servlet-name>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>filterAccess</filter-name>
-        <servlet-name>create_section</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>filterAccess</filter-name>

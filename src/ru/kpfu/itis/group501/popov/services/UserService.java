@@ -1,9 +1,9 @@
 package ru.kpfu.itis.group501.popov.services;
 
 import ru.kpfu.itis.group501.popov.models.CustomCookie;
-import ru.kpfu.itis.group501.popov.repository.CustomStatement;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.models.User;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -3,7 +3,8 @@ package ru.kpfu.itis.group501.popov.servlets;
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Message;
 import ru.kpfu.itis.group501.popov.models.User;
-import ru.kpfu.itis.group501.popov.repository.CustomRepository;
+import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ServletSendMessage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
+        Repository repository = RepositorySingleton.getRepository();
         String username = request.getParameter("username");
         String topic = request.getParameter("topic");
         String content = request.getParameter("content");
@@ -27,14 +29,14 @@ public class ServletSendMessage extends HttpServlet {
         java.sql.Date write_date = new java.sql.Date(date.getTime());
         Time write_time = new Time(write_date.getTime());
         write_time.toLocalTime();
-        List list = CustomRepository.getBy(User.class, "username", username);
+        List list = repository.getBy(User.class, "username", username);
         User recipient;
         if (list.isEmpty()) {
             response.sendRedirect("/profile");
         }
         recipient = (User)list.get(0);
         Message new_message = new Message(content, (int)recipient.get("id"), (int)current_user.get("id"), topic, write_date, write_time);
-        CustomRepository.add(new_message);
+        repository.add(new_message);
         response.sendRedirect("/messages/input");
     }
 
