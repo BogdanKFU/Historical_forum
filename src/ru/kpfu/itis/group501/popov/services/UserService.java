@@ -1,9 +1,11 @@
 package ru.kpfu.itis.group501.popov.services;
 
 import ru.kpfu.itis.group501.popov.models.CustomCookie;
+import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,7 @@ public class UserService {
     private static Pattern email_p = Pattern.compile("[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*");
     private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!А-Яа-я.,]*");
     private static Pattern for_names = Pattern.compile("[A-Za-z()0-9/?!]{1,}[A-Za-z0-9А-Яа-я/?!()]*");
+    private static Repository repository = RepositorySingleton.getRepository();
 
     public static boolean authenticate(HttpServletRequest request, HttpServletResponse response) {
         Matcher matcher = password_p.matcher(request.getParameter("password"));
@@ -41,7 +44,7 @@ public class UserService {
         if (!matcher.matches() || !matcher1.matches()) {
             return false;
         }
-        List list = CustomRepository.getBy(User.class, "username", request.getParameter("username"));
+        List list = repository.getBy(User.class, "username", request.getParameter("username"));
         User auth_user;
         if (list != null && !list.isEmpty()) {
             auth_user = (User) list.get(0);
@@ -55,7 +58,7 @@ public class UserService {
                 Time assign_time = new Time(date1.getTime());
                 if (request.getParameter("remember") != null) {
                     CustomCookie customCookie = new CustomCookie((int) auth_user.get("id"), token, assign_time);
-                    CustomRepository.add(customCookie);
+                    repository.add(customCookie);
                     cookie.setMaxAge(60 * 60);
                     response.addCookie(cookie);
                 }
@@ -111,7 +114,7 @@ public class UserService {
         auth_user.set("last_name", last_name);
         auth_user.set("birth_date", sql_date);
         auth_user.set("interest", interest);
-        CustomRepository.update(auth_user);
+        repository.update(auth_user);
         return true;
     }
 
@@ -175,7 +178,7 @@ public class UserService {
             e.printStackTrace();
         }
         CustomStatement cs = new CustomStatement();
-        Map map = CustomRepository.do_sql(cs.selectBy(User.class, "username", login).or("email", email));
+        Map map = repository.do_sql(cs.selectBy(User.class, "username", login).or("email", email));
         if (map == null) {
             return false;
         }
@@ -193,14 +196,14 @@ public class UserService {
             catch (NullPointerException ex) {
                 return false;
             }
-            CustomRepository.add(new_user);
+            repository.add(new_user);
             request.getSession().setAttribute("current_user", new_user);
             String token = create_token(new_user);
             Cookie cookie = new Cookie("current_user", token);
             java.util.Date date1 = new java.util.Date();
             Time assign_time = new Time(date1.getTime());
             CustomCookie customCookie = new CustomCookie((int) new_user.get("id"), token,assign_time);
-            CustomRepository.add(customCookie);
+            repository.add(customCookie);
             cookie.setMaxAge(60);
             response.addCookie(cookie);
             return true;

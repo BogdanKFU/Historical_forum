@@ -4,8 +4,10 @@ import ru.kpfu.itis.group501.popov.models.EventArticle;
 import ru.kpfu.itis.group501.popov.models.PersonArticle;
 import ru.kpfu.itis.group501.popov.models.Section;
 import ru.kpfu.itis.group501.popov.models.Topic;
+import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ModelSearchService {
+    private static Repository repository = RepositorySingleton.getRepository();
+
     public static Map<String, List<Object>> searchPersonArticle(HttpServletRequest request) {
         String name = request.getParameter("name");
         String str1 = request.getParameter("firstdate");
@@ -42,7 +46,7 @@ public class ModelSearchService {
         if (dead_date != null && cs.getValues().size() > 0) {
             cs = cs.and().le("dead_date", dead_date);
         }
-        return CustomRepository.do_sql(cs);
+        return repository.do_sql(cs);
     }
 
     public static Map<String, List<Object>> searchEventArticle(HttpServletRequest request) {
@@ -74,7 +78,7 @@ public class ModelSearchService {
         if (dead_date != null && cs.getValues().size() > 0) {
             cs = cs.and().le("end_date", dead_date);
         }
-        return CustomRepository.do_sql(cs);
+        return repository.do_sql(cs);
     }
 
     public static Map<String, List<Object>> searchSection(HttpServletRequest request) {
@@ -84,7 +88,7 @@ public class ModelSearchService {
         if (name != null) {
             cs = cs.like("name", name);
         }
-        return CustomRepository.do_sql(cs);
+        return repository.do_sql(cs);
     }
 
     public static Map<String, List<Object>> searchTopic(HttpServletRequest request) {
@@ -94,6 +98,6 @@ public class ModelSearchService {
         if (name != null) {
             cs = cs.like("name", name);
         }
-        return CustomRepository.do_sql(cs);
+        return repository.do_sql(cs);
     }
 }

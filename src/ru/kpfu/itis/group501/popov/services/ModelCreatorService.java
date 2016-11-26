@@ -1,7 +1,9 @@
 package ru.kpfu.itis.group501.popov.services;
 
 import ru.kpfu.itis.group501.popov.models.*;
+import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomRepository;
+import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Time;
@@ -11,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class ModelCreatorService {
     private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!А-Яа-я.,]*");
+    private static Repository repository = RepositorySingleton.getRepository();
 
     public static boolean createTopic(HttpServletRequest request) {
         String string = request.getParameter("id");
@@ -33,7 +36,7 @@ public class ModelCreatorService {
         Time publish_time = new Time(publish_date.getTime());
         publish_time.toLocalTime();
         Topic new_topic = new Topic(content, (int) current_user.get("id"), name, publish_date, publish_time, id);
-        CustomRepository.add(new_topic);
+        repository.add(new_topic);
         return true;
     }
 
@@ -56,7 +59,7 @@ public class ModelCreatorService {
         Time sending_time = new Time(sending_date.getTime());
         sending_time.toLocalTime();
         TopicComment new_topic_comment = new TopicComment(content, (int) current_user.get("id"), sending_date, sending_time, topic_id);
-        CustomRepository.add(new_topic_comment);
+        repository.add(new_topic_comment);
         return true;
     }
 
@@ -79,7 +82,7 @@ public class ModelCreatorService {
         Time send_time = new Time(send_date.getTime());
         send_time.toLocalTime();
         EventComment new_event_comment = new EventComment(content, events_article, 0, send_date, send_time, (int) current_user.get("id"));
-        CustomRepository.add(new_event_comment);
+        repository.add(new_event_comment);
         return true;
     }
 
@@ -102,7 +105,7 @@ public class ModelCreatorService {
         Time send_time = new Time(send_date.getTime());
         send_time.toLocalTime();
         PersonComment new_person_comment = new PersonComment(content, persons_article, 0, send_date, send_time, (int) current_user.get("id"));
-        CustomRepository.add(new_person_comment);
+        repository.add(new_person_comment);
         return true;
     }
 }
