@@ -40,14 +40,20 @@ public class ServletPersonArticle extends HttpServlet {
         catch (NumberFormatException ex) {
             response.sendRedirect("/profile");
         }
-        List list = repository.getBy(PersonArticle.class, "id", id);
+        CustomStatement cs1 = new CustomStatement();
+        Map map1 = repository.do_select(cs1.selectBy(PersonArticle.class, "id", id));
+        List list = (List) map1.get("PersonArticle");
         CustomStatement cs = new CustomStatement();
-        Map map = repository.do_sql(cs.select(PersonComment.class).joinBy(User.class, "persons_article", id));
+        Map map = repository.do_select(cs.select(PersonComment.class).joinBy(User.class, "PersonComment.persons_article", id));
         if (!list.isEmpty()) {
             PersonArticle article = (PersonArticle) list.get(0);
             Map<String, Object> root = new HashMap<>();
             root.put("article", article);
             root.put("comments", map.get("PersonComment"));
+            Role role = (Role) request.getSession().getAttribute("role");
+            root.put("role", role);
+            User current_user = (User) request.getSession().getAttribute("current_user");
+            root.put("current_user", current_user);
             Helpers.render(request, response, "person_article.ftl", root);
         }
         else {

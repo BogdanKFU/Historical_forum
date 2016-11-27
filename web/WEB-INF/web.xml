@@ -286,6 +286,30 @@
         <filter-name>filterAccess</filter-name>
         <servlet-name>send_message</servlet-name>
     </filter-mapping>
+    <filter>
+        <filter-name>filterAdmin</filter-name>
+        <filter-class>ru.kpfu.itis.group501.popov.filters.FilterAdmin</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>filterAdmin</filter-name>
+        <servlet-name>getAllModels</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>filterAdmin</filter-name>
+        <servlet-name>getModels</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>filterAdmin</filter-name>
+        <servlet-name>createModel</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>filterAdmin</filter-name>
+        <servlet-name>editModel</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>filterAdmin</filter-name>
+        <servlet-name>deleteModel</servlet-name>
+    </filter-mapping>
     <error-page>
         <error-code>404</error-code>
         <location>/404.html</location>

@@ -23,6 +23,9 @@ public class CustomRepository implements Repository {
     static {
         init();
     }
+
+    private CustomStatement statement;
+
     /*
     Создает UPDATE запрос без WHERE и т.п.
      */
@@ -138,27 +141,6 @@ public class CustomRepository implements Repository {
     }
 
     /*
-    Создает SELECT запрос без WHERE и т.п.
-     */
-    private static String create_select(Class model) {
-        String select = "SELECT * FROM ";
-        try {
-            Field field = model.getDeclaredField("table_name");
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            try {
-                select = select + field.get(model);
-                return select;
-            } catch (IllegalAccessException e) {
-                return null;
-            }
-        } catch (NoSuchFieldException e) {
-            return null;
-        }
-    }
-
-    /*
     Вставка новой записи в БД, не работает с custom types, т.е. логика этого метода
     не предполагает использование метода setObject(int i, Object arg) у statement
      */
@@ -240,46 +222,6 @@ public class CustomRepository implements Repository {
     }
 
     /*
-    Возвращает List<Object> по одному полю. Используется WHERE
-     */
-    public List getBy(Class model, String field_name, Object value) {
-        String select = create_select(model) + " WHERE " + field_name + "=?";
-            try {
-                PreparedStatement statement;
-                statement = conn.prepareStatement(select);
-                try {
-                    Method method = map.get(value.getClass().getName());
-                    if (!method.isAccessible()) {
-                        method.setAccessible(true);
-                    }
-                    method.invoke(statement, 1, value);
-                    ResultSet rs = statement.executeQuery();
-                    return toList(rs, model);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-            } catch (SQLException e) {
-                return new ArrayList();
-            }
-        return new ArrayList();
-    }
-
-    /*
-    Возвращает все записи как List<Object>
-     */
-    public List get(Class model) {
-        String select = create_select(model);
-        try {
-            PreparedStatement statement;
-            statement = conn.prepareStatement(select);
-            ResultSet rs = statement.executeQuery();
-            return toList(rs, model);
-        } catch (SQLException e) {
-            return new ArrayList();
-        }
-    }
-
-    /*
     Возвращает список объектов, соответствующих данному ResultSet
      */
     private static List<Object> toList(ResultSet rs, Class<Model> model) {;
@@ -303,14 +245,18 @@ public class CustomRepository implements Repository {
         }
         try {
             while (rs.next()) {
-                for(String c: relation_map.keySet()) {
-                    String [] args = c.split("\\.");
-                    Model new_model = create_model(rs, Class.forName("ru.kpfu.itis.group501.popov.models." + args[0]));
-                    Model sub_model = create_model(rs, relation_map.get(c));
-                    Method method = new_model.getClass().getMethod("get", String.class);
-                    Map relations = (Map) method.invoke(new_model, "relations");
-                    relations.put(args[1], sub_model);
-                    map.get(args[0]).add(new_model);
+                for(String h: map.keySet()) {
+                    Model new_model = create_model(rs, Class.forName("ru.kpfu.itis.group501.popov.models." + h));
+                    for(String c: relation_map.keySet()) {
+                        if (c.matches(h + "." + "[A-Za-z]?[A-Za-z0-9-_]*")) {
+                            String[] args = c.split("\\.");
+                            Model sub_model = create_model(rs, relation_map.get(c));
+                            Method method = new_model.getClass().getMethod("get", String.class);
+                            Map relations = (Map) method.invoke(new_model, "relations");
+                            relations.put(args[1], sub_model);
+                        }
+                    }
+                    map.get(h).add(new_model);
                 }
             }
             return map;
@@ -335,7 +281,7 @@ public class CustomRepository implements Repository {
                     if (!method.isAccessible()) {
                         method.setAccessible(true);
                     }
-                    Object table_field = method.invoke(rs, f.getName());
+                    Object table_field = method.invoke(rs, new_model.get("table_name") + "." + f.getName());
                     new_model.set(f.getName(), table_field);
                 }
             }
@@ -357,9 +303,10 @@ public class CustomRepository implements Repository {
         }
     }
 
-    public Map<String, List<Object>> do_sql(CustomStatement statement) {
+    public Map<String, List<Object>> do_select(CustomStatement statement) {
+        this.statement = statement;
         try {
-            String sql = statement.getSql();
+            String sql = (statement.rename_fields()).getSql();
             PreparedStatement ps;
             ps = conn.prepareStatement(sql);
             Map<String, Object> values = statement.getValues();
@@ -367,7 +314,9 @@ public class CustomRepository implements Repository {
             int i = 1;
             if (values != null) {
                 for (String s : values.keySet()) {
-                    Field field = model.getDeclaredField(s);
+                    String [] args = s.split("\\.");
+                    Class new_model = Class.forName("ru.kpfu.itis.group501.popov.models." + args[0]);
+                    Field field = new_model.getDeclaredField(args[1]);
                     Class classes = field.getType();
                     Method method = map.get(classes.getName());
                     if (!field.isAccessible()) {
@@ -393,7 +342,7 @@ public class CustomRepository implements Repository {
                 map.put(model.getSimpleName(), list);
             }
             return map;
-        } catch (SQLException | InvocationTargetException | IllegalAccessException | NoSuchFieldException e) {
+        } catch (SQLException | InvocationTargetException | IllegalAccessException | NoSuchFieldException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;

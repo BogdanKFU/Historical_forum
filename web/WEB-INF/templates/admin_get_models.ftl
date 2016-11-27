@@ -8,6 +8,7 @@
 <a href="/admin/entities/create?model=${model}">Создать</a>
 <div class="panel panel-default">
     <#if error??>${error}</#if>
+    <div class="table-responsive">
     <table class="table">
         <thead>
         <tr>
@@ -34,6 +35,7 @@
                     </td>
                     <td><a href="/admin/entities/edit?model=${model}&id=${f.get("id")}">Редактировать</a></td>
                 <#list fields as g>
+                <#if f.get(g.getName())??>
                 <#if f.get(g.getName())?is_boolean>
                     <td>${f.get(g.getName())?c}</td>
                 <#elseif f.get(g.getName())?is_string || f.get(g.getName())?is_date>
@@ -43,6 +45,9 @@
                 <#else>
                 <td>${f.get(g.getName())}</td>
                 </#if>
+                <#else>
+                <td></td>
+                </#if>
                 </#list>
                 </#if>
             </tr>
@@ -50,6 +55,7 @@
         </#if>
         </tbody>
     </table>
+    </div>
 </div>
 
 </#macro>

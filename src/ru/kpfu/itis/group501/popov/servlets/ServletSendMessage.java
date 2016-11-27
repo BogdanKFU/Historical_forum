@@ -2,8 +2,10 @@ package ru.kpfu.itis.group501.popov.servlets;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Message;
+import ru.kpfu.itis.group501.popov.models.Role;
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
@@ -14,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "ServletSendMessage")
 public class ServletSendMessage extends HttpServlet {
@@ -29,7 +33,9 @@ public class ServletSendMessage extends HttpServlet {
         java.sql.Date write_date = new java.sql.Date(date.getTime());
         Time write_time = new Time(write_date.getTime());
         write_time.toLocalTime();
-        List list = repository.getBy(User.class, "username", username);
+        CustomStatement cs = new CustomStatement();
+        Map map = repository.do_select(cs.selectBy(User.class, "username", username));
+        List list = (List)map.get("User");
         User recipient;
         if (list.isEmpty()) {
             response.sendRedirect("/profile");
@@ -44,7 +50,12 @@ public class ServletSendMessage extends HttpServlet {
         /*
         В строчке кому - AJAX запрос
          */
+        Map<String, Object> root = new HashMap<>();
+        User current_user = (User) request.getSession().getAttribute("current_user");
+        root.put("current_user", current_user);
+        Role role = (Role) request.getSession().getAttribute("role");
+        root.put("role", role);
         response.setContentType("text/html;charset=utf-8");
-        Helpers.render(request, response, "sending_message.ftl");
+        Helpers.render(request, response, "sending_message.ftl", root);
     }
 }

@@ -2,6 +2,7 @@ package ru.kpfu.itis.group501.popov.servlets;
 
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
@@ -33,13 +34,13 @@ public class ServletBan extends HttpServlet {
         catch (NumberFormatException ex) {
             response.sendRedirect("/profile");
         }
-        List list = repository.getBy(User.class, "id", id);
+        CustomStatement cs = new CustomStatement();
+        Map map = repository.do_select(cs.selectBy(User.class, "id", id));
+        List list = (List) map.get("User");
         if (list != null && !list.isEmpty()) {
             User user = (User) list.get(0);
-            Map<String, Object> root = new HashMap<>();
             user.set("blocked", true);
             repository.update(user);
-            root.put("user", user);
             response.sendRedirect("/profile/?id=" + id);
         }
         else {

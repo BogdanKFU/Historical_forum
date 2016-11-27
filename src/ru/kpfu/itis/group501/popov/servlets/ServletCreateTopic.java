@@ -1,6 +1,8 @@
 package ru.kpfu.itis.group501.popov.servlets;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
+import ru.kpfu.itis.group501.popov.models.Role;
+import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.services.ModelCreatorService;
 
 import javax.servlet.ServletException;
@@ -34,6 +36,10 @@ public class ServletCreateTopic extends HttpServlet {
         }
         Map<String, Object> root = new HashMap<>();
         root.put("id_section", id);
+        Role role = (Role) request.getSession().getAttribute("role");
+        root.put("role", role);
+        User current_user = (User) request.getSession().getAttribute("current_user");
+        root.put("current_user", current_user);
         response.setContentType("text/html;charset=utf-8");
         Helpers.render(request, response, "create_topic.ftl", root);
     }

@@ -8,6 +8,7 @@ public class Role extends Model {
     private String name = null;
     private static String table_name = "role";
     private Map<String, Model> relations = new HashMap<>();
+    private static Map<String, String> foreign_key = new HashMap<>();
     // здесь должно быть либо manytomany, либо нужно создать новую сущность - "Принадлежность к роли"
 
     public Role(int id, String name) {
@@ -16,5 +17,9 @@ public class Role extends Model {
     }
 
     public Role() {
+    }
+
+    public static Map<String, String> getForeign_key() {
+        return foreign_key;
     }
 }

@@ -15,6 +15,7 @@ ${article.get("end_date")}
         <li><p>${g.get("content")} ${g.get("relations").get("sender").get("username")}</p></li>
     </#list>
 </ul>
+<#if current_user??>
 <form action="/articles/event" method="post">
     <input type="hidden" name="id" value="${article.get("id")}"
     <label>
@@ -22,6 +23,7 @@ ${article.get("end_date")}
     </label>
     <input type="submit"/>
 </form>
+</#if>
 </#macro>
 
 <@display_page/>

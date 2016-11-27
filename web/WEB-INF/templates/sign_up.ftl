@@ -5,8 +5,6 @@
 </#macro>
 
 <#macro page_body>
-<div id="nav"><a href="/auth/login">Войти</a></div>
-<div id="nav"><a href="/auth/sign_up">Зарегистрироваться</a></div>
 <div class="row">
     <div class="content panel panel-default col-md-9">
         <div class="page-heading">
@@ -53,8 +51,10 @@
                 <div class="col-sm-2"></div>
                 <button type="submit" class="btn btn-primary" name="send">Submit</button>
             </div>
-
         </form>
+        <#if error??>
+            ${error}
+        </#if>
     </div>
 </div>
 </#macro>

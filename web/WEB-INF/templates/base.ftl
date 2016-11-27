@@ -50,20 +50,29 @@
                         </ul>
                     </li>
                     <li><a href="/forum">Forum</a></li>
+    <#if current_user??>
                     <li><a href="/get_user_list">Users</a></li>
+    </#if>
+                    <#if role?? && role.get("name").equals("admin")>
+                        <li><a href="/admin/entities">Admin</a></li>
+                    </#if>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/auth/login">Log in</a></li>
-                    <li><a href="/auth/sign_up">Registration</a></li>
-                    <li class="dropdown">
-                        <a href="/profile" class="dropdown-toggle" data-toggle="dropdown">Profile<b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/profile">Private page</a></li>
-                            <li><a href="/logout">Log out</a></li>
-                        </ul>
-                    </li>
+                    <#if current_user??>
+
+                        <li class="dropdown">
+                            <a href="/profile" class="dropdown-toggle" data-toggle="dropdown">${current_user.get("username")}<b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/profile">Private page</a></li>
+                                <li><a href="/logout">Log out</a></li>
+                            </ul>
+                        </li>
+                    <#else>
+                        <li><a href="/auth/login">Log in</a></li>
+                        <li><a href="/auth/sign_up">Registration</a></li>
+                    </#if>
                 </ul>
 
             </div>

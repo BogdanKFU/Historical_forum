@@ -1,6 +1,8 @@
 package ru.kpfu.itis.group501.popov.services;
 
 import ru.kpfu.itis.group501.popov.models.CustomCookie;
+import ru.kpfu.itis.group501.popov.models.Role;
+import ru.kpfu.itis.group501.popov.models.UsersRoles;
 import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.models.User;
@@ -32,10 +34,10 @@ public class UserService {
     Возвращает true, если удалось аутентифицировать пользователя,
     false, если - нет.
     */
-    private static Pattern password_p = Pattern.compile("[A-Za-z0-9-_]{4,}[A-Za-z0-9-_]*");
-    private static Pattern email_p = Pattern.compile("[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*");
-    private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!А-Яа-я.,]*");
-    private static Pattern for_names = Pattern.compile("[A-Za-z()0-9/?!]{1,}[A-Za-z0-9А-Яа-я/?!()]*");
+    private static Pattern password_p = Pattern.compile("[A-Za-z0-9_]{4,}[A-Za-z0-9-_]*");
+    private static Pattern email_p = Pattern.compile("[a-z0-9A-Z]?[a-z0-9A-Z]*@[a-z0-9A-Z]?[a-z0-9A-Z]*\\.[a-z0-9A-Z]?[a-z0-9A-Z]*");
+    private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!а-яА-Я., ]*");
+    private static Pattern for_names = Pattern.compile("[A-Za-z0-9а-яА-Я]?[A-Za-z0-9а-яА-Я/?!() ]*");
     private static Repository repository = RepositorySingleton.getRepository();
 
     public static boolean authenticate(HttpServletRequest request, HttpServletResponse response) {
@@ -44,14 +46,18 @@ public class UserService {
         if (!matcher.matches() || !matcher1.matches()) {
             return false;
         }
-        List list = repository.getBy(User.class, "username", request.getParameter("username"));
+        CustomStatement cs = new CustomStatement();
+        Map map = repository.do_select(cs.select(User.class).join(UsersRoles.class).joinBy(Role.class, "User.username", request.getParameter("username")));
+        List list = (List) map.get("UsersRoles");
         User auth_user;
         if (list != null && !list.isEmpty()) {
-            auth_user = (User) list.get(0);
+            auth_user = (User) ((Map)((UsersRoles)list.get(0)).get("relations")).get("id_user");
+            Role role = (Role) ((Map)((UsersRoles)list.get(0)).get("relations")).get("id_role");
             String pass = request.getParameter("password");
             String hash = hash(pass);
             if (auth_user.get("password").equals(hash)) {
                 request.getSession().setAttribute("current_user", auth_user);
+                request.getSession().setAttribute("role", role);
                 String token = create_token(auth_user);
                 Cookie cookie = new Cookie("current_user", token);
                 java.util.Date date1 = new java.util.Date();
@@ -167,7 +173,7 @@ public class UserService {
         Matcher matcher4 = for_names.matcher(name);
         Matcher matcher5 = for_names.matcher(surname);
         if (!matcher1.matches() || !matcher2.matches() || !matcher3.matches() || !matcher4.matches() || !matcher5.matches()) {
-            return false;
+            throw new NullPointerException("Данные не верны");
         }
         SimpleDateFormat format = new SimpleDateFormat();
         format.applyPattern("yyyy-MM-dd");
@@ -178,13 +184,13 @@ public class UserService {
             e.printStackTrace();
         }
         CustomStatement cs = new CustomStatement();
-        Map map = repository.do_sql(cs.selectBy(User.class, "username", login).or("email", email));
+        Map map = repository.do_select(cs.selectBy(User.class, "username", login).or("User.email", email));
         if (map == null) {
             return false;
         }
         else {
             String hash = hash(password);
-            User new_user = null;
+            User new_user;
             try {
                 if (date != null) {
                     new_user = new User(login, hash, email, new Date(date.getTime()), name, surname);
@@ -197,7 +203,10 @@ public class UserService {
                 return false;
             }
             repository.add(new_user);
+            UsersRoles usersRoles = new UsersRoles((int)new_user.get("id"), 2);
+            repository.add(usersRoles);
             request.getSession().setAttribute("current_user", new_user);
+            request.getSession().setAttribute("role", usersRoles);
             String token = create_token(new_user);
             Cookie cookie = new Cookie("current_user", token);
             java.util.Date date1 = new java.util.Date();

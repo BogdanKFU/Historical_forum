@@ -15,9 +15,6 @@
                     <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
-            <div class="col-md-2 col-sm-2">
-                <a href="/admin/create_section"><button type="submit" class=" btn btn-primary">Create section</button></a>
-            </div>
         </div>
 
         <div class="row">

@@ -11,9 +11,11 @@
         <div class="page-heading">
             <h1>Создать статью об исторической личности</h1>
         </div>
+        <#if error??>
         <div class="alert alert-danger" role="alert">
             <strong>Ошибка </strong>Какая-то ошибка
         </div>
+        </#if>
         <form method="post" action="/articles/persons/create_new" class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-2"><label for="name">Имя</label></div>

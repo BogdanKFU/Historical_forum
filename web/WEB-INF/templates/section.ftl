@@ -15,9 +15,11 @@
                     <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
+            <#if current_user??>
             <div class="col-md-2 col-sm-2">
                 <a href="/forum/section/create_topic?id=${id}"><button type="submit" class=" btn btn-primary" name="search">Create theme</button></a>
             </div>
+            </#if>
         </div>
 
         <div class="row">

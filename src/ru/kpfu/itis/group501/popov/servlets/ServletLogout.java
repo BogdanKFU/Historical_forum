@@ -20,6 +20,7 @@ public class ServletLogout extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("current_user");
         request.getSession().removeAttribute("current_user");
+        request.getSession().removeAttribute("role");
         CustomRepository.remove_cookie((int)user.get("id"));
         Cookie cookie = new Cookie("current_user", "");
         cookie.setMaxAge(0);

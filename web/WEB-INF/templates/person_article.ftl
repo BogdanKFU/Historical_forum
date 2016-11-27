@@ -50,7 +50,7 @@
     </#list>
 </ul>
             </div>
-
+<#if current_user??>
             <form method="post" action="/articles/person" class="form-horizontal">
                 <div class="form-group">
                     <input type="hidden" name="id" value="${article.get("id")}">
@@ -69,7 +69,7 @@
                 </div>
 
             </form>
-
+</#if>
         </div>
     </div>
 </div>

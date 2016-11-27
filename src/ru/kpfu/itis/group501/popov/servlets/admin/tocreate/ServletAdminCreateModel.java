@@ -2,7 +2,10 @@ package ru.kpfu.itis.group501.popov.servlets.admin.tocreate;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Model;
+import ru.kpfu.itis.group501.popov.models.Role;
+import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.services.UserService;
 import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
@@ -91,10 +94,15 @@ public class ServletAdminCreateModel extends HttpServlet {
             if (foreign_key != null && foreign_key.size() != 0) {
                 for(String s: foreign_key.keySet()) {
                     Class forName = Class.forName("ru.kpfu.itis.group501.popov.models." + foreign_key.get(s));
-                    fk_map.put(s, repository.get(forName));
+                    CustomStatement cs = new CustomStatement();
+                    fk_map.put(s, (List) repository.do_select(cs.select(forName)).get(forName.getSimpleName()));
                 }
                 root.put("fk", fk_map);
             }
+            User current_user = (User) request.getSession().getAttribute("current_user");
+            root.put("current_user", current_user);
+            Role role = (Role) request.getSession().getAttribute("role");
+            root.put("role", role);
             Helpers.render(request, response, "admin_create_model.ftl", root);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             response.sendRedirect("/admin/entities");

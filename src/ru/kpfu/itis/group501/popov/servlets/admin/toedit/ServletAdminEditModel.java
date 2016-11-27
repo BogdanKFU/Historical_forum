@@ -2,8 +2,10 @@ package ru.kpfu.itis.group501.popov.servlets.admin.toedit;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
 import ru.kpfu.itis.group501.popov.models.Model;
+import ru.kpfu.itis.group501.popov.models.Role;
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.services.UserService;
 import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
@@ -51,7 +53,9 @@ public class ServletAdminEditModel extends HttpServlet {
                             new_model.set("password", UserService.hash(request.getParameter("password")));
                         }
                         else {
-                            User user = (User) repository.getBy(User.class, "id", id).get(0);
+                            CustomStatement cs = new CustomStatement();
+                            Map map = repository.do_select(cs.selectBy(User.class, "id", id));
+                            User user = (User)((List) map.get("User")).get(0);
                             new_model.set("password", user.get("password"));
                         }
                     }
@@ -83,7 +87,9 @@ public class ServletAdminEditModel extends HttpServlet {
             Class aClass = Class.forName("ru.kpfu.itis.group501.popov.models." + model);
             String str = request.getParameter("id");
             Integer id = Integer.valueOf(str);
-            Object o = repository.getBy(aClass, "id", id).get(0);
+            CustomStatement cs = new CustomStatement();
+            Map map = repository.do_select(cs.selectBy(aClass, "id", id));
+            Object o = ((List)map.get(aClass.getSimpleName())).get(0);
             Map<String, Object> root = new HashMap<>();
             root.put("model", model);
             Field[] fields = aClass.getDeclaredFields();
@@ -99,12 +105,18 @@ public class ServletAdminEditModel extends HttpServlet {
             if (foreign_key != null && foreign_key.size() != 0) {
                 for(String s: foreign_key.keySet()) {
                     Class forName = Class.forName("ru.kpfu.itis.group501.popov.models." + foreign_key.get(s));
-                    fk_map.put(s, repository.get(forName));
+                    CustomStatement cs1 = new CustomStatement();
+                    Map map1 = repository.do_select(cs.select(forName));
+                    fk_map.put(s, (List) map1.get(forName.getSimpleName()));
                 }
                 root.put("fk", fk_map);
             }
             root.put("object", o);
             root.put("fields", field_list);
+            User current_user = (User) request.getSession().getAttribute("current_user");
+            root.put("current_user", current_user);
+            Role role = (Role) request.getSession().getAttribute("role");
+            root.put("role", role);
             Helpers.render(request, response, "admin_edit_model.ftl", root);
         } catch (ClassNotFoundException e) {
             response.sendRedirect("/admin/entities/?model=" + model);

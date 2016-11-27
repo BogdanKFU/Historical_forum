@@ -1,6 +1,8 @@
 package ru.kpfu.itis.group501.popov.servlets.admin.toget;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
+import ru.kpfu.itis.group501.popov.models.Role;
+import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.repository.Repository;
 import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
@@ -28,10 +30,14 @@ public class ServletAdminGetModels extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         Map<String, Object> root = new HashMap<>();
         Repository repository = RepositorySingleton.getRepository();
+        User current_user = (User) request.getSession().getAttribute("current_user");
+        root.put("current_user", current_user);
+        Role role = (Role) request.getSession().getAttribute("role");
+        root.put("role", role);
         try {
             Class aClass = Class.forName("ru.kpfu.itis.group501.popov.models." + model);
             CustomStatement cs = new CustomStatement();
-            Map map = repository.do_sql(cs.select(aClass));
+            Map map = repository.do_select(cs.select(aClass));
             Field [] fields = aClass.getDeclaredFields();
             List<Field> field_list = new ArrayList<>();
             for(Field f: fields) {

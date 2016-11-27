@@ -12,23 +12,23 @@
     <#if object.get(f.getName())??>
         <#if f.getType().getSimpleName().equals("String") && !f.getName().equals("password")>
             <label>
-                <input type="text" name="${f.getName()}" value="${object.get(f.getName())}">
+                <input type="text" name="${f.getName()}" value="${object.get(f.getName())}" placeholder="${f.getName()}">
             </label>
         <#elseif f.getType().getSimpleName().equals("Date")>
             <label>
-                <input type="date" name="${f.getName()}" value="${object.get(f.getName())?iso_utc}">
+                <input type="date" name="${f.getName()}" value="${object.get(f.getName())?iso_utc}" placeholder="${f.getName()}">
             </label>
         <#elseif f.getType().getSimpleName().equals("Time")>
             <label>
-                <input type="text" pattern="([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" name="${f.getName()}" value="${object.get(f.getName())?time}"/>
+                <input type="text" pattern="([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" name="${f.getName()}" value="${object.get(f.getName())?time}" placeholder="${f.getName()}"/>
             </label>
         <#elseif f.getType().getSimpleName().equals("String") && f.getName().equals("password")>
             <label>
-                <input type="password" name="${f.getName()}">
+                <input type="password" name="${f.getName()}" placeholder="${f.getName()}">
             </label>
         <#elseif f.getType().getSimpleName().equals("boolean")>
             <label>
-                <input type="checkbox" name="${f.getName()}" <#if object.get(f.getName()).equals(true)>checked="checked"</#if>>
+                <input type="checkbox" name="${f.getName()}" placeholder="${f.getName()}" <#if object.get(f.getName()).equals(true)>checked="checked"</#if>>
             </label>
         <#elseif fk?? && fk.get(f.getName())??>
             <label>
@@ -40,29 +40,29 @@
             </label>
         <#else>
             <label>
-                <input type="number" min="0" step="1" name="${f.getName()}" value="${object.get(f.getName())?int}">
+                <input type="number" min="0" step="1" name="${f.getName()}" placeholder="${f.getName()}" value="${object.get(f.getName())?int}">
             </label>
         </#if>
     <#else>
         <#if f.getType().getSimpleName().equals("String") && !f.getName().equals("password")>
             <label>
-                <input type="text" name="${f.getName()}"">
+                <input type="text" name="${f.getName()}" placeholder="${f.getName()}">
             </label>
         <#elseif f.getType().getSimpleName().equals("Date")>
             <label>
-                <input type="date" name="${f.getName()}">
+                <input type="date" name="${f.getName()}" placeholder="${f.getName()}">
             </label>
         <#elseif f.getType().getSimpleName().equals("Time")>
             <label>
-                <input type="text" pattern="([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" name="${f.getName()}" />
+                <input type="text" pattern="([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" name="${f.getName()}" placeholder="${f.getName()}" />
             </label>
         <#elseif f.getType().getSimpleName().equals("String") && f.getName().equals("password")>
             <label>
-                <input type="password" name="${f.getName()}">
+                <input type="password" name="${f.getName()}" placeholder="${f.getName()}">
             </label>
         <#elseif f.getType().getSimpleName().equals("boolean")>
             <label>
-                <input type="radio" name="${f.getName()}">
+                <input type="radio" name="${f.getName()}" placeholder="${f.getName()}">
             </label>
         <#elseif fk?? && fk.get(f.getName())??>
             <label>

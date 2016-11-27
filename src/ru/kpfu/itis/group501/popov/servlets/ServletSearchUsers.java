@@ -26,7 +26,7 @@ public class ServletSearchUsers extends HttpServlet {
         String q = request.getParameter("q");
         CustomStatement cs = new CustomStatement();
         Repository repository = RepositorySingleton.getRepository();
-        Map<String, List<Object>> map = repository.do_sql(cs.select(User.class).like("username", q));
+        Map<String, List<Object>> map = repository.do_select(cs.select(User.class).like("User.username", q));
         if (map != null) {
             List list = map.get("User");
             JSONArray ja = new JSONArray();

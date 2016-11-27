@@ -11,9 +11,11 @@
         <div class="page-heading">
             <h1>Создать тему</h1>
         </div>
+        <#if error??>
         <div class="alert alert-danger" role="alert">
             <strong>Ошибка </strong>Какая-то ошибка
         </div>
+        </#if>
         <form method="post" action="/forum/section/create_topic" class="form-horizontal">
             <input type="hidden" name="id" value="${id_section}">
             <div class="form-group">

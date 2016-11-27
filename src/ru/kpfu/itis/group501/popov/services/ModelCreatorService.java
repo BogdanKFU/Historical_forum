@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModelCreatorService {
-    private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!А-Яа-я.,]*");
+    private static Pattern text = Pattern.compile("[A-Za-z#@$%^&*()_+=0-9/?!а-яА-Я.,]*");
     private static Repository repository = RepositorySingleton.getRepository();
 
     public static boolean createTopic(HttpServletRequest request) {

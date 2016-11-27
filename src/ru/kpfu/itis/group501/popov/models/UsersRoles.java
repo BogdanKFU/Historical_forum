@@ -15,6 +15,14 @@ public class UsersRoles extends Model {
         foreign_key.put("id_role", "Role");
     }
 
+    public UsersRoles() {
+    }
+
+    public UsersRoles(int id_user, int id_role) {
+        this.id_user = id_user;
+        this.id_role = id_role;
+    }
+
     public static Map<String, String> getForeign_key() {
         return foreign_key;
     }

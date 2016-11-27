@@ -24,7 +24,7 @@ public class ModelSearchService {
         CustomStatement cs = new CustomStatement();
         cs = cs.select(PersonArticle.class);
         if (name != null) {
-            cs = cs.like("name", name);
+            cs = cs.like("PersonArticle.name", name);
         }
         Date birth_date = null;
         if (str1 != null) {
@@ -35,18 +35,18 @@ public class ModelSearchService {
             dead_date = Helpers.toDate(str2);
         }
         if (birth_date != null && cs.getValues().size() == 0) {
-            cs = cs.ge("birth_date", birth_date);
+            cs = cs.ge("PersonArticle.birth_date", birth_date);
         }
         if (birth_date != null && cs.getValues().size() > 0) {
-            cs = cs.and().ge("birth_date", birth_date);
+            cs = cs.and().ge("PersonArticle.birth_date", birth_date);
         }
         if (dead_date != null && cs.getValues().size() == 0) {
-            cs = cs.le("dead_date", dead_date);
+            cs = cs.le("PersonArticle.dead_date", dead_date);
         }
         if (dead_date != null && cs.getValues().size() > 0) {
-            cs = cs.and().le("dead_date", dead_date);
+            cs = cs.and().le("PersonArticle.dead_date", dead_date);
         }
-        return repository.do_sql(cs);
+        return repository.do_select(cs);
     }
 
     public static Map<String, List<Object>> searchEventArticle(HttpServletRequest request) {
@@ -56,7 +56,7 @@ public class ModelSearchService {
         CustomStatement cs = new CustomStatement();
         cs = cs.select(EventArticle.class);
         if (name != null) {
-            cs = cs.like("name", name);
+            cs = cs.like("EventArticle.name", name);
         }
         Date birth_date = null;
         if (str1 != null) {
@@ -67,18 +67,18 @@ public class ModelSearchService {
             dead_date = Helpers.toDate(str2);
         }
         if (birth_date != null && cs.getValues().size() == 0) {
-            cs = cs.ge("begin_date", birth_date);
+            cs = cs.ge("EventArticle.begin_date", birth_date);
         }
         if (birth_date != null && cs.getValues().size() > 0) {
-            cs = cs.and().ge("begin_date", birth_date);
+            cs = cs.and().ge("EventArticle.begin_date", birth_date);
         }
         if (dead_date != null && cs.getValues().size() == 0) {
-            cs = cs.le("end_date", dead_date);
+            cs = cs.le("EventArticle.end_date", dead_date);
         }
         if (dead_date != null && cs.getValues().size() > 0) {
-            cs = cs.and().le("end_date", dead_date);
+            cs = cs.and().le("EventArticle.end_date", dead_date);
         }
-        return repository.do_sql(cs);
+        return repository.do_select(cs);
     }
 
     public static Map<String, List<Object>> searchSection(HttpServletRequest request) {
@@ -86,9 +86,9 @@ public class ModelSearchService {
         CustomStatement cs = new CustomStatement();
         cs = cs.select(Section.class);
         if (name != null) {
-            cs = cs.like("name", name);
+            cs = cs.like("Section.name", name);
         }
-        return repository.do_sql(cs);
+        return repository.do_select(cs);
     }
 
     public static Map<String, List<Object>> searchTopic(HttpServletRequest request) {
@@ -96,8 +96,8 @@ public class ModelSearchService {
         CustomStatement cs = new CustomStatement();
         cs = cs.select(Topic.class);
         if (name != null) {
-            cs = cs.like("name", name);
+            cs = cs.like("Topic.name", name);
         }
-        return repository.do_sql(cs);
+        return repository.do_select(cs);
     }
 }

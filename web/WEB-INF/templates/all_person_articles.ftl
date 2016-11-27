@@ -26,9 +26,11 @@
                     <button type="submit" class=" btn btn-primary">Search</button>
                 </form>
             </div>
+    <#if role?? && role.equals("admin")>
             <div class="col-md-2" style="margin-top: 19px">
                 <a href="/articles/persons/create_new" class="btn btn-primary">Create person</a>
             </div>
+    </#if>
         </div>
         <div class="row">
             <div class="panel" id="list">

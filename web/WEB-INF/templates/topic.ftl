@@ -59,6 +59,7 @@
     </#list>
 </ul>
                 </div>
+                <#if current_user??>
                 <form method="post" action="/forum/section/topic" class="form-horizontal">
                     <div class="form-group">
                         <input type="hidden" name="id" value="${topic.get("id")}"
@@ -77,7 +78,7 @@
                     </div>
 
                 </form>
-
+</#if>
                 <ul class="pagination" style="margin-left: 20px">
                     <li><a href="#">&laquo;</a></li>
                     <li><a href="#">1</a></li>

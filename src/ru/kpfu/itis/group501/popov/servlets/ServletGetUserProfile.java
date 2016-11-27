@@ -1,8 +1,10 @@
 package ru.kpfu.itis.group501.popov.servlets;
 
 import ru.kpfu.itis.group501.popov.helpers.Helpers;
+import ru.kpfu.itis.group501.popov.models.Role;
 import ru.kpfu.itis.group501.popov.models.User;
 import ru.kpfu.itis.group501.popov.repository.Repository;
+import ru.kpfu.itis.group501.popov.repository.custom.CustomStatement;
 import ru.kpfu.itis.group501.popov.singletons.RepositorySingleton;
 
 import javax.servlet.ServletException;
@@ -31,12 +33,18 @@ public class ServletGetUserProfile extends HttpServlet {
             response.sendRedirect("/profile");
         }
         Repository repository = RepositorySingleton.getRepository();
-        List list = repository.getBy(User.class, "id", id);
+        CustomStatement cs = new CustomStatement();
+        Map map = repository.do_select(cs.selectBy(User.class, "id", id));
+        List list = (List) map.get("User");
         if (list != null && !list.isEmpty()) {
             User user = (User) list.get(0);
             Map<String, Object> root = new HashMap<>();
             root.put("user", user);
             response.setCharacterEncoding("utf-8");
+            Role role = (Role) request.getSession().getAttribute("role");
+            root.put("role", role);
+            User current_user = (User) request.getSession().getAttribute("current_user");
+            root.put("current_user", current_user);
             Helpers.render(request, response, "another_profile.ftl", root);
         }
         else {

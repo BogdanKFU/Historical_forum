@@ -10,7 +10,5 @@ public interface Repository {
     void add(Model model);
     void delete(Class model, int id);
     void update(Model model);
-    List get(Class model);
-    List getBy(Class model, String field_name, Object value);
-    Map<String, List<Object>> do_sql(CustomStatement statement);
+    Map<String, List<Object>> do_select(CustomStatement statement);
 }
